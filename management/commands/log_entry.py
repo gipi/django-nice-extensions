@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand, CommandError
 from django.contrib.admin.models import LogEntry, ADDITION, CHANGE, DELETION
 from django.contrib.contenttypes.models import ContentType
-from django.db.models import get_app, get_models
+from django.db.models import get_app, get_apps, get_models
 
 import datetime
 from optparse import make_option
@@ -25,6 +25,7 @@ class LogEntryCommand(BaseCommand):
     }
 
     _range = None
+    filtered_entries = None
 
     def print_logs_header(self, app_label, modelname, filtered_entries):
         print '%d actions for %s in %s\n---' % (
@@ -55,6 +56,17 @@ class LogEntryCommand(BaseCommand):
         self.print_logs_header(app_label, modelname, filtered_entries)
         self.print_logs(filtered_entries)
 
+    def print_log_entries(self):
+        # then we use the list for dump the log entries
+        for app_label, model in self.items:
+            self.handle_app_model(app_label, model)
+
+            print
+
+    def models_from_app(self, app_label, app):
+        for model in get_models(app):
+            self.items.append((app_label, model._meta.object_name.lower()))
+
     def handle(self, *args, **options):
         is_daily = options.get('is_daily')
         if is_daily:
@@ -63,22 +75,24 @@ class LogEntryCommand(BaseCommand):
 
             self._range = (then, now)
 
-        items = []
-        for arg in args:
-            # first of all we build up the list of app_label and modelname
-            try:
-                app_label, modelname = arg.split(".")
-                items.append((app_label, modelname,))
-            except ValueError:
-                app = get_app(arg)
-                for model in get_models(app):
-                    items.append((arg, model._meta.object_name.lower()))
+        self.items = []
+        if len(args) == 0:
+            for app in get_apps():
+                name = app.__name__.split(".")[-2]
+                self.models_from_app(name, app)
+        else:
+            for arg in args:
+                # first of all we build up the list of app_label and modelname
+                try:
+                    app_label, modelname = arg.split(".")
+                    self.items.append((app_label, modelname,))
+                except ValueError:
+                    app = get_app(arg)
+                    self.models_from_app(arg, app)
 
-        # then we use the list for dump the log entries
-        for app_label, model in items:
-            self.handle_app_model(app_label, model)
 
-            print
+        self.print_log_entries()
+
 
 class Command(LogEntryCommand):
     pass
