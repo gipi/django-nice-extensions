@@ -24,7 +24,7 @@ class LogEntryCommand(BaseCommand):
         DELETION: "-",
     }
 
-    range = None
+    _range = None
 
     def print_logs_header(self, app_label, modelname, filtered_entries):
         print '%d actions for %s in %s\n---' % (
@@ -47,9 +47,9 @@ class LogEntryCommand(BaseCommand):
         filtered_entries = LogEntry.objects.filter(
             content_type=content_type,
         )
-        if self.range:
+        if self._range:
             filtered_entries = filtered_entries.filter(
-                action_time__range=self.range
+                action_time__range=self._range
             )
 
         self.print_logs_header(app_label, modelname, filtered_entries)
@@ -61,7 +61,7 @@ class LogEntryCommand(BaseCommand):
             now = datetime.datetime.now()
             then = now + datetime.timedelta(days=-1)
 
-            self.range = (then, now)
+            self._range = (then, now)
 
         items = []
         for arg in args:
