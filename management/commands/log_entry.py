@@ -15,7 +15,7 @@ class LogEntryCommand(BaseCommand):
         make_option('--last-day', action='store_true', default=False, dest='is_daily',
             help='output only the last day logs'),
     )
-    args="[appname.modelname1] [appname.modelname2] ..."
+    args="[appname] [appname.modelname] ..."
     help = "Create a summary of the last actions in the admin"""
 
     flags_dict = {
