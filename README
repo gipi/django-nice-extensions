@@ -1,0 +1,24 @@
+These are some commands that I created in order to more easily
+manage my daily activity with my Django projects
+
+Backup
+------
+
+Dump like the dumpdata command but use as default the --natural flag
+
+
+Phoenix
+-------
+
+Simply do a sequence of commands that reset the database to an initial
+stage loading a default admin account with credential 'admin' and 'password'.
+
+I use this to recreate locally the situation of a deployied server so to not
+have to remember the sequence of commands and options to issue.
+
+
+Log Entry
+---------
+
+Dump the content of the admin.logentry model so to know what has been created
+from the admin interface.
