@@ -36,7 +36,7 @@ class LogEntryCommand(BaseCommand):
 
     def print_logs(self, filtered_entries):
         for entry in filtered_entries:
-            print self.flags_dict[entry.action_flag], str(entry.action_time), entry.object_repr
+            print self.flags_dict[entry.action_flag], str(entry.action_time), entry.user, entry.object_repr, entry.object_id
 
 
     def handle_app_model(self, app_label, modelname):
