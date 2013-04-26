@@ -15,7 +15,7 @@ setup(
     author = 'Gianluca Pacchiella',
     author_email = 'gp@ktln2.org',
 
-    py_modules = ['nice_extensions'],
+    packages = ['nice_extensions'],
     install_requires = [
         'django>=1.4',
         'django-extensions',
