@@ -22,3 +22,10 @@ Log Entry
 
 Dump the content of the admin.logentry model so to know what has been created
 from the admin interface.
+
+
+In order to install this you have to add this module to the ``INSTALLED_APPS``:
+
+    INSTALLED_APPS += [
+      'nice_extensions',
+    ]
