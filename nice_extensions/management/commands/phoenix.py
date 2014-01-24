@@ -13,6 +13,7 @@ class Command(BaseCommand):
         print '* syncdb'
         call_command('syncdb', noinput=True)
         print '* migrate'
+        # TODO: verify that South is installed before to call this
         call_command('migrate')
         fixtures_path = os.path.abspath(# build the path to the admin fixture
                 os.path.join(
